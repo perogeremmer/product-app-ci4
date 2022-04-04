@@ -56,7 +56,6 @@ class Product extends ResourceController
     public function create()
     {
         $payload = [
-            "id" => uniqid(),
             "name" => $this->request->getPost('name'),
             "stock" => (int) $this->request->getPost('stock'),
             "price" => (int) $this->request->getPost('price'),
