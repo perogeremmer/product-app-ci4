@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
-use App\Models\Product as ProductModel; 
+use App\Models\ProductModel; 
 
 class Product extends ResourceController
 {
