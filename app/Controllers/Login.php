@@ -51,26 +51,43 @@ class Login extends ResourceController
      */
     public function create()
     {
-        $email = $this->request->getPost('email');
-        $password = $this->request->getPost('password');
+        try {
+            $validation =  \Config\Services::validation();
 
-        $user = $this->userModel
-                ->where('email', $email)
-                ->first();
+            $val = $this->validate([
+                'email' => 'required',
+                'password' => 'required',
+            ]);
 
-        if(!$user) {
-            throw new \Exception("User not found!");
+            if(!$val) {
+                session()->setFlashData("errors", $validation->listErrors());
+
+                return redirect()->to(previous_url());
+            }
+    
+            $email = $this->request->getPost('email');
+            $password = $this->request->getPost('password');
+    
+            $user = $this->userModel
+                    ->where('email', $email)
+                    ->first();
+    
+            if(!$user) {
+                throw new \Exception("User not found!");
+            }
+    
+            if(md5($password) != $user['password']) {
+                throw new \Exception("Credentials is invalid!");
+            }
+    
+            $this->session->set('id', $user['id']);
+            $this->session->set('name', $user['name']);
+            $this->session->set('loggedIn', true);
+    
+            return redirect()->to('/product');
+        } catch(\Exception $e) {
+            return redirect()->to(previous_url());
         }
-
-        if(md5($password) != $user['password']) {
-            throw new \Exception("Credentials is invalid!");
-        }
-
-        $this->session->set('id', $user['id']);
-        $this->session->set('name', $user['name']);
-        $this->session->set('loggedIn', true);
-
-        return redirect()->to('/product');
     }
 
     /**
