@@ -43,6 +43,9 @@
                 </tbody>
             </table>
         </div>
+        <div class="col-12">
+            <?= $pager->links('products', 'custom_pagination') ?>
+        </div>
     </div>
 </div>
 <?= $this->endSection() ?>

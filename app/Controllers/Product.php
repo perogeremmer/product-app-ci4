@@ -18,11 +18,11 @@ class Product extends ResourceController
      */
     public function index()
     {
-        
-        $products = $this->productModel->findAll();
+        $products = $this->productModel->paginate(1, 'products');
 
         $payload = [
-            "products" => $products
+            "products" => $products,
+            "pager" => $this->productModel->pager
         ];
 
         echo view('product/index', $payload);

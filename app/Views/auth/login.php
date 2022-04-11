@@ -11,9 +11,9 @@
                 </div>
             <?php } ?>
 
-            <?php if(session()->getFlashdata('error')) { ?>
-                <div class="alert alert-error">
-                    <?= session()->getFlashdata('error') ?>
+            <?php if(session()->getFlashdata('errors')) { ?>
+                <div class="alert alert-danger">
+                    <?= session()->getFlashdata('errors') ?>
                 </div>
             <?php } ?>
 
@@ -22,7 +22,7 @@
                 <div class="form-group">
                     <label for="example-email">Email</label>
                     <input type="text" class="form-control" id="example-email" aria-describedby="emailHelp" 
-                        placeholder="Enter email" name="email">
+                        placeholder="Enter email" name="email" value="<?= old('email') ?>">
                 </div>
 
                 <div class="form-group">

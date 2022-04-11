@@ -52,17 +52,21 @@ class Login extends ResourceController
     public function create()
     {
         try {
-            $validation =  \Config\Services::validation();
-
-            $val = $this->validate([
+            $validate = $this->validate([
                 'email' => 'required',
                 'password' => 'required',
+            ], [
+                "email" => [
+                    "required" => "Email harus diisi!",
+                ],
+                "password" => [
+                    "required" => "Anda harus mengisi kata sandi!",
+                ],
             ]);
 
-            if(!$val) {
-                session()->setFlashData("errors", $validation->listErrors());
-
-                return redirect()->to(previous_url());
+            if(!$validate) {
+                session()->setFlashData("errors", $this->validator->listErrors());
+                return redirect()->to(previous_url())->withInput();
             }
     
             $email = $this->request->getPost('email');
@@ -73,11 +77,13 @@ class Login extends ResourceController
                     ->first();
     
             if(!$user) {
-                throw new \Exception("User not found!");
+                session()->setFlashData("errors", "Email or password is invalid");
+                return redirect()->to(previous_url())->withInput();
             }
     
             if(md5($password) != $user['password']) {
-                throw new \Exception("Credentials is invalid!");
+                session()->setFlashData("errors", "Email or password is invalid");
+                return redirect()->to(previous_url())->withInput();
             }
     
             $this->session->set('id', $user['id']);
